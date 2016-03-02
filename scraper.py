@@ -1,24 +1,24 @@
-# This is a template for a Python scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
+#!/usr/bin/env python
 
-# import scraperwiki
-# import lxml.html
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-#
-# # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
+import scraperwiki
+import requests
+import json
+from collections import Counter
 
-# You don't have to do things with the ScraperWiki and lxml libraries.
-# You can use whatever libraries you want: https://morph.io/documentation/python
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+url = 'https://premium.scraperwiki.com/x0hdcrq/mw20fbg1d0nharn/sql/?q=select%20%0A%09caption%0Afrom%20swdata%0A--%20where%20userurl%20%3E%20%0Aorder%20by%20description%0A'
+media = json.loads(requests.get(url).text)
+print media
+fulllist = []
+for caption in media:
+    wordlist = caption['caption'].split(' ')
+    for word in wordlist:
+        fulllist.append(word)
+        print fulllist
+counts = Counter(fulllist)
+print counts
+
+
+# Saving data:
+# unique_keys = [ 'id' ]
+# data = { 'id':12, 'name':'violet', 'age':7 }
+# scraperwiki.sql.save(unique_keys, data)
